@@ -1,0 +1,136 @@
+Intervlan routing:
+
+inside of switch
+en
+conf t
+vlan 12
+name IT
+exit
+vlan 45
+exit
+vlan 20
+exit
+int range fa0/1-2
+switchport access vlan 12
+"Do these for other vlan and connection accordingly"
+(config)int gig0/1
+switchport mode trunk
+wr
+
+Inside of router:()
+en 
+conf t
+int gig0/0.12
+encapsulation dot1q 12
+ip address 192.168.10.1 255.255.255.0
+exit
+"Do these steps for other ip address sections"
+
+go inside of computers add ip address subnet and default.
+Switch router port to on
+
+
+
+Static routing configuration:
+
+Step1: add ip address subnet and default to computers
+Step2:Routerleri birbirine tanit
+routerin icinde 
+ip route 10.0.10.0 255.255.255.0 10.0.0.2
+ip router 192.168.38.10 255.255.255.0 10.0.0.2
+"Do these to all routers accordingly"
+
+
+
+
+
+
+DHCP:
+inside of router:
+en conf t
+int gig0/0
+ip address 192.168.0.1 255.255.255.0
+no shutdown 
+exit
+ip dhcp pool ABC-POOL
+network 192.168.0.0 255.255.255.0
+default-router 192.168.0.254
+dns-server 192.168.0.1
+Optional => ip dhcp excluded address 192.168.0.2 192.168.05
+exit
+wr
+
+
+
+
+OSPF:
+Step1:Turn of routers add needed port to routers then swithc on
+Step2: give ip address subnet and default gateway to computers
+Step3: configure routers interfaces accordingly. Swicth ports on
+
+Inside of routers
+router ospf 100
+router-id 1.1.1.1 (Another router write 2.2.2.2)
+network 192.168.10.2 0.0.0.255(wild card subtract from) area 0
+"do these for all network"
+
+do these step for every router
+
+
+
+
+VTP:
+#server switch 
+Switch>en 
+Switch#conf t 
+Switch(config)#vlan 10 
+Switch(config-vlan)#name vlan10 
+Switch(config- vlan)#exit 
+Switch(config)#vlan 20 
+Switch(config-vlan)#name vlan20 
+Switch(config- vlan)#exit 
+Switch(config)#vtp mode server 
+Device mode already VTP SERVER. 
+Switch(config)#vtp domain khazar.org 
+Changing VTP domain name from NULL to khazar.org 
+Switch(config)#vtp password cisco 
+Setting device VLAN database password to cisco 
+# create trunk mode between all switches 
+Switch(config)#int range fastEthernet 0/1-3 
+Switch(config-if-range)#switchport mode trunk 
+Switch#show vlan 
+ 
+#client switch 
+Switch>en 
+Switch#conf t 
+Enter configuration commands, one per line. End with CNTL/Z. 
+Switch(config)#vtp mode client 
+Setting device to VTP CLIENT mode. 
+Switch(config)#vtp domain khazar.org 
+Changing VTP domain name from NULL to khazar.org 
+Switch(config)#vtp password cisco 
+Setting device VLAN database password to cisco 
+Switch(config)#exit 
+Switch#show vlan 
+Switch(config)#int fastEthernet 0/2 
+Switch(config-if)#switchport access vlan 10 
+Switch(config-if)#switchport voice vlan 20 
+Switch(config-if)#exit 
+ 
+ 
+ 
+# TRANSPARENT switch 
+Switch>en 
+Switch#conf t 
+Enter configuration commands, one per line. End with CNTL/Z. 
+Switch(config)#vtp mode transparent  
+Setting device to VTP TRANSPARENT mode. 
+Switch(config)#vtp domain khazar.org 
+Domain name already set to khazar.org. 
+Switch(config)#vtp password cisco 
+Setting device VLAN database password to cisco 
+Switch(config)#int range fastEthernet 0/1-2 
+Switch(config-if-range)#switchport mode trunk
+
+
+
